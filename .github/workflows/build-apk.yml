@@ -21,8 +21,14 @@ jobs:
           distribution: temurin
           java-version: '17'
           
-      - name: Install Android SDK components
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      -  - name: Install Android SDK components
+       
+        shell: bash
+        run: |
+          SDK_DIR="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDK_TOOL="$(find "$SDK_DIR/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          test -n "$SDK_TOOL"
+          "$SDK_TOOL" --sdk_root="$SDK_DIR" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
